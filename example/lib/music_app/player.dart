@@ -3,20 +3,29 @@ import 'package:flutter/material.dart';
 class Player extends StatefulWidget {
   final Function onTap;
 
-  Player({required this.onTap});
+  Player({@required this.onTap});
 
   @override
   _PlayerState createState() => _PlayerState();
 }
 
 class _PlayerState extends State<Player> {
+
+  double sliderValue = 30.0;
+  double musicTime = 156.0;
+
+  String musicTimeDisplay(Duration d) {
+    return d.toString().substring(2, 7); /// mm:ss
+    // return d.toString().split('.').first.padLeft(8, "0"); /// HH:mm:ss
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final cardSize = MediaQuery.of(context).size.height * 0.4;
+    final cardSize = MediaQuery.of(context).size.width - kToolbarHeight * 2;
     return Material(
       child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         child: Stack(
           children: <Widget>[
             Container(
@@ -41,7 +50,9 @@ class _PlayerState extends State<Player> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: MediaQuery.of(context).size.height - 150,
+                    height: MediaQuery.of(context).size.height -
+                        150 -
+                        kToolbarHeight,
                     child: Stack(
                       children: <Widget>[
                         Column(
@@ -56,9 +67,9 @@ class _PlayerState extends State<Player> {
                                 children: <Widget>[
                                   IconButton(
                                     onPressed: () => widget.onTap(),
-                                    iconSize: 32,
+                                    iconSize: 24,
                                     icon: Icon(
-                                      Icons.arrow_drop_down,
+                                      Icons.keyboard_arrow_down,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -68,7 +79,7 @@ class _PlayerState extends State<Player> {
                                         Text(
                                           "PLAYING NOW",
                                           overflow: TextOverflow.ellipsis,
-                                          style: textTheme.bodyText1!
+                                          style: textTheme.bodyText1
                                               .apply(color: Colors.white),
                                         ),
                                       ],
@@ -88,8 +99,14 @@ class _PlayerState extends State<Player> {
                               child: Container(
                                 height: cardSize,
                                 width: cardSize,
-                                child:
-                                    Image.asset("assets/thumb/XVztg3oXmX4.jpg"),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(6.0),
+                                  ),
+                                  child: Image.asset(
+                                    r"assets/thumb/XVztg3oXmX4.jpg",
+                                  ),
+                                ),
                               ),
                             ),
                             // Music info
@@ -104,10 +121,10 @@ class _PlayerState extends State<Player> {
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          "Wurkit (Original Mix)",
+                                          r"Wurkit (Original Mix)",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: textTheme.headline5!.apply(
+                                          style: textTheme.headline5.apply(
                                             color: Colors.white,
                                           ),
                                         ),
@@ -116,7 +133,7 @@ class _PlayerState extends State<Player> {
                                           "Kyle Watson",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: textTheme.headline6!.apply(
+                                          style: textTheme.headline6.apply(
                                               color: Colors.white
                                                   .withOpacity(0.5)),
                                         ),
@@ -132,22 +149,26 @@ class _PlayerState extends State<Player> {
                     ),
                   ),
                   Container(
-                    height: 150,
                     child: Column(
                       children: <Widget>[
                         SliderTheme(
                           data: SliderThemeData(
-                            trackHeight: 3,
-                            thumbShape:
-                                RoundSliderThumbShape(enabledThumbRadius: 6),
+                            trackHeight: 2,
+                            thumbShape: RoundSliderThumbShape(
+                              enabledThumbRadius: 8,
+                            ),
                           ),
                           child: Slider(
                             inactiveColor: Colors.white.withOpacity(0.1),
                             activeColor: Colors.white,
-                            value: 0.5,
+                            value: sliderValue,
                             min: 0.0,
-                            max: 100.0,
-                            onChanged: (double value) {},
+                            max: musicTime,
+                            onChanged: (double value) {
+                              setState(() {
+                                sliderValue = value;
+                              });
+                            },
                           ),
                         ),
                         //SizedBox(height: 5),
@@ -157,13 +178,13 @@ class _PlayerState extends State<Player> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                "00:35",
-                                style: textTheme.bodyText2!.apply(
+                                musicTimeDisplay(Duration(seconds: sliderValue.toInt())),
+                                style: textTheme.bodyText2.apply(
                                     color: Colors.white.withOpacity(0.7)),
                               ),
                               Text(
-                                "-02:05",
-                                style: textTheme.bodyText2!.apply(
+                                musicTimeDisplay(Duration(seconds: musicTime.toInt())),
+                                style: textTheme.bodyText2.apply(
                                     color: Colors.white.withOpacity(0.7)),
                               )
                             ],

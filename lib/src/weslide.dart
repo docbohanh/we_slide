@@ -8,11 +8,11 @@ import 'weslide_controller.dart';
 class WeSlide extends StatefulWidget {
   /// This is the widget that will be below as a footer,
   /// this can be used as a [BottomNavigationBar]
-  final Widget? footer;
+  final Widget footer;
 
   /// This is the widget that will be on top as a AppBar,
   /// this can be used as a [AppBar]
-  final Widget? appBar;
+  final Widget appBar;
 
   /// This is the widget that will be hided with [Panel].
   /// You can fit any widget. This parameter is required
@@ -20,11 +20,11 @@ class WeSlide extends StatefulWidget {
 
   /// This is the widget that will slide over the [Body].
   /// You can fit any widget.
-  final Widget? panel;
+  final Widget panel;
 
   /// This is the header that will be over the [Panel].
   /// You can fit any widget.
-  final Widget? panelHeader;
+  final Widget panelHeader;
 
   /// This is the initial value that set the panel min height.
   /// If the value is greater than 0, panel will be this size over [body]
@@ -40,7 +40,7 @@ class WeSlide extends StatefulWidget {
 
   /// This is the value that set the panel width
   /// by default is MediaQuery.of(context).size.width
-  final double? panelWidth;
+  final double panelWidth;
 
   /// Set this value to create a border radius over Panel.
   /// When panelBorderRadiusBegin is diffrent from panelBorderRadiusEnd
@@ -68,7 +68,7 @@ class WeSlide extends StatefulWidget {
 
   /// This is the value that set the body width.
   /// By default is MediaQuery.of(context).size.width
-  final double? bodyWidth;
+  final double bodyWidth;
 
   /// Set this value to create a parallax effect when the panel is slide up.
   /// By default is 0.1
@@ -147,14 +147,14 @@ class WeSlide extends StatefulWidget {
 
   /// This object used to control animations, using methods like hide or show
   /// to display panel or check if is visible with variable [isOpened]
-  WeSlideController? controller;
+  WeSlideController controller;
 
   /// Weslide Contructor
   WeSlide({
-    Key? key,
+    Key key,
     this.footer,
     this.appBar,
-    required this.body,
+    @required this.body,
     this.panel,
     this.panelHeader,
     this.panelMinSize = 150.0,
@@ -182,7 +182,7 @@ class WeSlide extends StatefulWidget {
     this.overlay = false,
     this.blur = false,
     this.hideAppBar = true,
-    List<TweenSequenceItem<double>>? fadeSequence,
+    List<TweenSequenceItem<double>> fadeSequence,
     this.animateDuration = const Duration(milliseconds: 300),
     this.controller,
   })  : /*assert(body != null, 'body could not be null'),*/
@@ -212,18 +212,18 @@ class WeSlide extends StatefulWidget {
 
 class _WeSlideState extends State<WeSlide> with SingleTickerProviderStateMixin {
   // Main Animation Controller
-  late AnimationController _ac;
+  AnimationController _ac;
   // Panel Border Radius Effect[Tween]
-  late Animation<double> _panelborderRadius;
+  Animation<double> _panelborderRadius;
   // Body Border Radius Effect [Tween]
-  late Animation<double> _bodyBorderRadius;
+  Animation<double> _bodyBorderRadius;
   // Scale Animation Effect [Tween]
-  late Animation<double> _scaleAnimation;
+  Animation<double> _scaleAnimation;
   // PanelHeader animation Effect [Tween]
-  late Animation<double> _fadeAnimation;
+  Animation<double> _fadeAnimation;
 
   // Get current controller
-  WeSlideController get _effectiveController => widget.controller!;
+  WeSlideController get _effectiveController => widget.controller;
 
   // Check if panel is visible
   bool get _ispanelVisible =>
@@ -288,14 +288,14 @@ class _WeSlideState extends State<WeSlide> with SingleTickerProviderStateMixin {
 
   /// Gesture Vertical Update [GestureDetector]
   void _handleVerticalUpdate(DragUpdateDetails updateDetails) {
-    var delta = updateDetails.primaryDelta!;
+    var delta = updateDetails.primaryDelta;
     var fractionDragged = delta / widget.panelMaxSize;
     _ac.value -= 1.5 * fractionDragged;
   }
 
   /// Gesture Vertical End [GestureDetector]
   void _handleVerticalEnd(DragEndDetails endDetails) {
-    var velocity = endDetails.primaryVelocity!;
+    var velocity = endDetails.primaryVelocity;
 
     if (velocity > 0.0) {
       _ac.reverse().then((x) {
@@ -318,7 +318,7 @@ class _WeSlideState extends State<WeSlide> with SingleTickerProviderStateMixin {
 
   // Get Body Animation [Paralax]
   Animation<Offset> _getAnimationOffSet(
-      {required double minSize, required double maxSize}) {
+      {@required double minSize, @required double maxSize}) {
     final _closedPercentage =
         (widget.panelMaxSize - minSize) / widget.panelMaxSize;
 
@@ -481,7 +481,7 @@ class _WeSlideState extends State<WeSlide> with SingleTickerProviderStateMixin {
                 /** Panel widget **/
                 Container(
                   height: _height - _getPanelSize(),
-                  child: widget.panel!,
+                  child: widget.panel,
                 ),
                 /** Panel Header widget **/
                 widget.panelHeader != null && widget.hidePanelHeader
@@ -501,7 +501,7 @@ class _WeSlideState extends State<WeSlide> with SingleTickerProviderStateMixin {
                     : SizedBox.shrink(),
                 /** panelHeader widget is null ?**/
                 widget.panelHeader != null && !widget.hidePanelHeader
-                    ? widget.panelHeader!
+                    ? widget.panelHeader
                     : SizedBox.shrink(),
               ],
             ),
@@ -517,7 +517,7 @@ class _WeSlideState extends State<WeSlide> with SingleTickerProviderStateMixin {
                           ? _ac.value * -widget.footerHeight
                           : 0.0,
                       width: MediaQuery.of(context).size.width,
-                      child: widget.footer!,
+                      child: widget.footer,
                     );
                   },
                 )
@@ -534,7 +534,7 @@ class _WeSlideState extends State<WeSlide> with SingleTickerProviderStateMixin {
                           : 0.0,
                       left: 0,
                       right: 0,
-                      child: widget.appBar!,
+                      child: widget.appBar,
                     );
                   },
                 )

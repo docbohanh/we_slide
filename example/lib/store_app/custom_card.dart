@@ -5,10 +5,10 @@ class CustomCard extends StatelessWidget {
   final String title;
   final Function ontap;
   const CustomCard({
-    Key? key,
-    required this.image,
-    required this.title,
-    required this.ontap,
+    Key key,
+    @required this.image,
+    @required this.title,
+    @required this.ontap,
   }) : super(key: key);
 
   @override
@@ -48,7 +48,7 @@ class CustomCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6!
+                        .headline6
                         .copyWith(fontSize: 15, color: colorTheme.onPrimary),
                   )
                 ],

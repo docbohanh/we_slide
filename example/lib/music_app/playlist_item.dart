@@ -1,14 +1,16 @@
 import 'model/playlist.dart';
 import 'package:flutter/material.dart';
 
+import 'model/song.dart';
 import 'playlist_type.dart';
 
 class PlaylistItem extends StatefulWidget {
-  PlaylistItem({Key? key, required this.playlist, this.small = false})
+  PlaylistItem({Key key, @required this.playlist, this.small = false, this.onTap})
       : super(key: key);
 
   final Playlist playlist;
   final bool small;
+  final Function(Song) onTap;
 
   @override
   _PlaylistItemState createState() => _PlaylistItemState();
@@ -65,59 +67,68 @@ class _PlaylistItemState extends State<PlaylistItem> {
               itemCount: widget.playlist.musicList.length,
               itemBuilder: (context, index) {
                 final item = widget.playlist.musicList[index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: widget.small ? 100 : 150,
-                      width: widget.small ? 100 : 150,
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          Image.asset(item.albumCover, fit: BoxFit.cover),
-                        ],
-                      ),
-                    ),
-                    if (widget.small)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 10),
-                        child: Container(
-                          width: widget.small ? 100 : 150,
-                          child: Text(
-                            item.name,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: colorTheme.onPrimary,
-                                fontWeight: FontWeight.w600),
-                          ),
+                return InkWell(
+                  onTap: () => widget.onTap(item),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: widget.small ? 100 : 150,
+                        width: widget.small ? 100 : 150,
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                              child: Image.asset(
+                                item.albumCover,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    if (!widget.small)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 10),
-                        child: Container(
-                          width: widget.small ? 100 : 150,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(item.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: colorTheme.onPrimary,
-                                      fontWeight: FontWeight.w600)),
-                              SizedBox(height: 5.0),
-                              Text(item.artist,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color:
-                                          colorTheme.onPrimary.withOpacity(0.5),
-                                      fontSize: 12)),
-                            ],
+                      if (widget.small)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, top: 10),
+                          child: Container(
+                            width: widget.small ? 100 : 150,
+                            child: Text(
+                              item.name,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: colorTheme.onPrimary,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                      if (!widget.small)
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, top: 10),
+                          child: Container(
+                            width: widget.small ? 100 : 150,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(item.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: colorTheme.onPrimary,
+                                        fontWeight: FontWeight.w600)),
+                                SizedBox(height: 5.0),
+                                Text(item.artist,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color:
+                                            colorTheme.onPrimary.withOpacity(0.5),
+                                        fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 );
               },
             ),

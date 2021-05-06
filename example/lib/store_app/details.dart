@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Details extends StatefulWidget {
   final Function onTap;
 
-  const Details({Key? key, required this.onTap}) : super(key: key);
+  const Details({Key key, @required this.onTap}) : super(key: key);
   @override
   _DetailsState createState() => _DetailsState();
 }

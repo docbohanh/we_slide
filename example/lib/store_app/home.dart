@@ -5,8 +5,8 @@ import 'custom_card.dart';
 class Home extends StatelessWidget {
   final Function onTap;
   const Home({
-    Key? key,
-    required this.onTap,
+    Key key,
+    @required this.onTap,
   }) : super(key: key);
 
   @override

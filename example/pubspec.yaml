@@ -18,11 +18,14 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   we_slide:
     path: ../
+#    git:
+#      url: https://github.com/luciano-work/we_slide.git
+#      ref: b965133b3e3a133a11e74fdce0b238675f9733e6
   flutter:
     sdk: flutter
 
