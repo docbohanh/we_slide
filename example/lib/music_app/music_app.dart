@@ -1,12 +1,14 @@
+import 'package:example/music_app/home.dart';
+import 'package:example/music_app/personal.dart';
+import 'package:example/nested_route.dart';
 import 'package:flutter/material.dart';
 import 'package:we_slide/we_slide.dart';
 import 'miniplayer.dart';
 import 'bottom_bar.dart';
 import 'player.dart';
-import 'home.dart';
 
 class MusicApp extends StatefulWidget {
-  MusicApp({Key key}) : super(key: key);
+  const MusicApp({Key key}) : super(key: key);
 
   @override
   _MusicAppState createState() => _MusicAppState();
@@ -15,12 +17,23 @@ class MusicApp extends StatefulWidget {
 class _MusicAppState extends State<MusicApp> {
   bool showMiniView = true;
   final WeSlideController _controller = WeSlideController();
+  int _bottomIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final double _panelMinSize =
         kToolbarHeight * 2 + MediaQuery.of(context).padding.bottom;
     final double _panelMaxSize = MediaQuery.of(context).size.height;
+
+    buiBody(int index) {
+      switch (index) {
+        case 1:
+          return PersonNested();
+          break;
+        default:
+          return HomeNested();
+      }
+    }
 
     return Scaffold(
       body: WeSlide(
@@ -29,24 +42,20 @@ class _MusicAppState extends State<MusicApp> {
         panelMaxSize: _panelMaxSize,
         overlayOpacity: 0.9,
         overlay: true,
-        body: Home(),
-        panelHeader: MiniPlayer(onTap: _controller.show),
+        body: buiBody(_bottomIndex),
+        panelHeader: MiniPlayer(
+          onTap: _controller.show,
+          onLike: () {
+            print('HEART');
+          },
+          onPlayOrPause: () => print('PLAY'),
+        ),
         panel: Player(onTap: _controller.hide),
-        footer: BottomBar(),
+        footer: BottomBar(
+          onTap: (index) => setState(() => _bottomIndex = index),
+        ),
         footerHeight: kToolbarHeight + MediaQuery.of(context).padding.bottom,
         appBarHeight: kToolbarHeight + MediaQuery.of(context).padding.top,
-        appBar: AppBar(
-          backgroundColor: Colors.red,
-          title: Text('Music App', style: TextStyle(fontSize: 16)),
-          actions: [
-            IconButton(icon: Icon(Icons.slideshow), onPressed: () {
-              print(showMiniView);
-              showMiniView = !showMiniView;
-              print(showMiniView);
-              setState(() {});
-            })
-          ],
-        ),
       ),
     );
   }

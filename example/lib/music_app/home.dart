@@ -1,3 +1,5 @@
+import 'package:example/nested_route.dart';
+
 import 'playlist_type.dart';
 import 'package:flutter/material.dart';
 
@@ -5,10 +7,29 @@ import 'model/playlist.dart';
 import 'model/song.dart';
 import 'playlist_item.dart';
 
+class HomeNested extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() =>_HomeNestedState();
+}
+
+class _HomeNestedState extends State<HomeNested> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Navigator(
+        key: homeNestedKey,
+        initialRoute: HomeNestedRoute.home,
+        onGenerateRoute: HomeNestedRoute.generateRoute,
+      ),
+    );
+  }
+}
+
 class Home extends StatefulWidget {
   final Function setting;
+  final Function(Song) onTap;
 
-  Home({Key key, this.setting}) : super(key: key);
+  Home({Key key, this.setting, this.onTap}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -171,73 +192,35 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void tapOnSong(Song s) {
+    
+    homeNestedKey.currentState.pushNamed(HomeNestedRoute.songDetail, arguments: s);
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final colorTheme = Theme.of(context).colorScheme;
-    return Container(
-      width: size.width,
-      height: size.height,
-      color: colorTheme.background,
-      child: Stack(
-        children: [
-          ValueListenableBuilder(
-            valueListenable: _opacity,
-            builder: (_, __, ___) {
-              return AnimatedOpacity(
-                duration: Duration(milliseconds: 200),
-                opacity: _opacity.value,
-                child: Container(
-                  height: 90,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Opacity(
-                              opacity: 1.0,
-                              child: Text('',
-                                  style: TextStyle(
-                                      color: colorTheme.onPrimary,
-                                      fontWeight: FontWeight.w600))),
-                        ),
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Opacity(
-                              opacity: 1.0,
-                              child: Text('',
-                                  style: TextStyle(
-                                      color: colorTheme.onPrimary,
-                                      fontWeight: FontWeight.w600))),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.settings, color: colorTheme.onPrimary),
-                        onPressed: widget.setting,
-                      ),
-                      SizedBox(width: 10),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-          ListView(
-            controller: _controller,
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            children: [
-              PlaylistItem(playlist: recent, small: true),
-              PlaylistItem(playlist: dance, small: false),
-              PlaylistItem(playlist: artist, small: false),
-            ],
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: colorTheme.background,
+        title: Text('Music App', style: TextStyle(fontSize: 16)),
+        leading: SizedBox(),
+      ),
+      body: Container(
+        width: size.width,
+        height: size.height,
+        color: colorTheme.background,
+        child: ListView(
+          controller: _controller,
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.only(top: 10, bottom: kToolbarHeight),
+          children: [
+            PlaylistItem(playlist: recent, small: true, onTap: tapOnSong),
+            PlaylistItem(playlist: dance, small: false, onTap: tapOnSong),
+            PlaylistItem(playlist: artist, small: false, onTap: tapOnSong),
+          ],
+        ),
       ),
     );
   }

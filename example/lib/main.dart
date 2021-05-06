@@ -1,3 +1,5 @@
+import 'package:example/music_app/song_detail.dart';
+import 'package:example/router.dart';
 import 'package:example/store_app/store_app.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +23,9 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkThemeData,
       title: 'WeSlide Demo',
       debugShowCheckedModeBanner: false,
-      home: MusicApp(),
+      key: navigatorKey,
+      initialRoute: MyRouter.root,
+      onGenerateRoute: MyRouter.generateRoute,
       // home: StoreApp(),
       // home: Basic(),
     );
